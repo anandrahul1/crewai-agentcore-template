@@ -1,10 +1,9 @@
-name: Deploy to AgentCore
+name: Deploy {{AGENT_NAME}} to AgentCore
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -32,5 +31,12 @@ jobs:
     
     - name: Deploy to AgentCore
       run: |
-        agentcore configure --entrypoint src/agent.py
-        agentcore launch --env AWS_REGION=us-west-2
+        echo "Deploying {{TEAM_NAME}}-{{AGENT_NAME}} to AgentCore..."
+        agentcore deploy --name {{TEAM_NAME}}-{{AGENT_NAME}} --runtime-config agentcore.yaml
+        echo "Deployment completed!"
+    
+    - name: Get deployment URL
+      run: |
+        DEPLOYMENT_URL=$(agentcore status --name {{TEAM_NAME}}-{{AGENT_NAME}} --output url)
+        echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
+        echo "Agent deployed at: $DEPLOYMENT_URL"
