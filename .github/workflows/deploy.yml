@@ -32,11 +32,11 @@ jobs:
     - name: Deploy to AgentCore
       run: |
         echo "Deploying {{TEAM_NAME}}-{{AGENT_NAME}} to AgentCore..."
-        agentcore deploy --name {{TEAM_NAME}}-{{AGENT_NAME}} --runtime-config agentcore.yaml
+        agentcore launch --name {{TEAM_NAME}}-{{AGENT_NAME}}
         echo "Deployment completed!"
     
-    - name: Get deployment URL
+    - name: Get deployment status
       run: |
-        DEPLOYMENT_URL=$(agentcore status --name {{TEAM_NAME}}-{{AGENT_NAME}} --output url)
-        echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
-        echo "Agent deployed at: $DEPLOYMENT_URL"
+        echo "Checking deployment status..."
+        agentcore list
+        echo "Agent deployment finished!"
